@@ -1,0 +1,65 @@
+
+0) Tutorial durchschauen 
+    http://cscircles.cemc.uwaterloo.ca/9-de/ 
+    Fälle Logik, def, Listen arrays, Methoden
+    https://docs.python.org/3.4/tutorial/datastructures.html#
+    https://docs.python.org/3.4/library/stdtypes.html?highlight=dict#mapping-types-dict
+
+    iteriere über ein dict wo bei du den schlüssel und den wert printest 
+    for k in d.items():
+        ...
+    for k in d.keys():
+        ...
+    for k in d.values():
+    
+    
+    Liste sortieren:
+    a = [  ("a",4),  ("b",1) , ("c",0) ];
+    sortiere dass folgender Output:
+    [ ("c",0) ,  ("b",1) ,  ("a",4) ]
+    -> python sort with lambda
+    
+    String replacement (formatierunge anschauen), Google: String replacement python
+    
+    a = "Gaga %04d" % 100;
+
+1) Matplot anschauen, 
+-> Bildchen laden , bilchen plotten,
+-> zusätzliche Daten darüber plotten (irgendwas)
+-> Legenden machen
+-> Titel , Lables, PlotRange einstellen
+
+
+2) Quiver plot (matplotlib.pyplot.quiver) 
+-> Beispiel machen
+->   [u,v] = [sin(x)*cos(y), cos(y)]
+
+3) Openpiv Tutorial machen
+4) PIVtest anschauen.
+
+5) Loop schreiben (funktion schreiben):
+    Input folder string : "../data/experiment1/"
+    Alle file paths der bilder in eine liste lesen : files = ['../data/exp1/f1.jpg', ..., '../data/exp1/f10.jpg' ]
+    Loop über alle bilder und den algorithmus PIV laufen lassen (werte einstellen, sauber definieren in notebook, dokumentiere!)
+    Für jedes bildpaar -> vektorfelder plotten -> abspeichern in ordner -> 
+
+    Filmchen machen mit ffmpeg (google ffmpeg movie from frame) 
+    VLC player installieren
+    
+    Immer Funktionen schreiben:
+        loadImages( path )
+        processImagePair( a, b, settings, ... )
+        plotVectorData( ) # speichert daten, oder speicher jpg plot vom vektorfeld
+        saveData() # file speichern (optionala)
+        
+        
+    
+6) Code schön schreiben, 5) aufräumen,
+7) Daten im Python organisieren, Datenstruktur machen für jede Bildsequenz (x,y,u,v, bildnameA,bildnameB)
+
+8) Wenn möglich denn Loop in ein Objekt packen:
+    proc = ProcessImagesPIV( "/data/exp1" );
+    proc.compute();
+    
+
+
