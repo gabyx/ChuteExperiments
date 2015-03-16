@@ -1,1 +1,26 @@
+# mache files sichtbar unsichtbar
 defaults write com.apple.finder AppleShowAllFiles YES
+
+# installiere module seriöse direkt global einfach mit
+pip install modulename
+# dann working dir wechseln zum ordner der python environement 
+# und neu aufsetzen (openpiv-python auf dem desktopn lassen)
+cd ~/PythonEnv
+./setup.py
+# dann das module ausprobieren mit
+activatePython34
+python
+>>> import modulename
+
+# starten von ipython notebook
+
+activatePython34 
+ipython notebook
+
+# oder 
+
+startIPython
+
+# immer tab drücke!
+
+
