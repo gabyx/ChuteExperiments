@@ -44,6 +44,8 @@
     Für jedes bildpaar -> vektorfelder plotten -> abspeichern in ordner -> 
 
     Filmchen machen mit ffmpeg (google ffmpeg movie from frame) 
+    ffmpeg -r 30 -i VideoFrame_%04d.tga -vcodec libx264 -tune grain -r 30 video.mp4
+
     VLC player installieren
     
     Immer Funktionen schreiben:
