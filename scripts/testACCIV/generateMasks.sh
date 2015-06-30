@@ -1,0 +1,1 @@
+../adjustImages/ImageProcessing.py -b ../../data/experiment5/exp5-0001.jpg -i ../../data/experiment5 -o ./masks/

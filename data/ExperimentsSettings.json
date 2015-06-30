@@ -1,0 +1,67 @@
+# Experiment Settings
+{
+
+    "framerate"             : 1000
+    "plexiglassThickness"   : 0.012
+    "outletOpeningWidth"    : 0.02
+    "upperSlopeLength"      : 0.0296
+    "upperSlopeAngleDeg"    : 30
+    "downSlopeAngleDeg"     : 20
+    "sandPaperRoughness"    : "P24"
+    "stepOntoFlowSurface"   : 0.002
+    "pxPerMeter"            : 967.5931
+
+    "experimentSettings"    :
+        {
+            "experiment1" :
+            {
+                "description" :  "with sand paper"
+                "mass"                  : 4.52
+                "approxGranules": 1e6
+            }            
+            "experiment2" :
+            {
+                "description" :  "with sand paper"
+                "mass"                  : 4.52
+                "approxGranules": 1e6
+            }    
+            "experiment3" :
+            {
+                "description" :  "with sand paper"
+                "mass"                  : 4.52
+                "approxGranules": 1e6
+            }    
+            "experiment4" :
+            {
+                "description" :  "without sand paper"
+                "mass"                  : 4.52
+                "approxGranules": 1e6
+            }    
+            "experiment5" :
+            {
+                "description" :  "3 trees without sand paper"
+                "treeDiameter":  0.005
+                "mass"                  : 4.52
+                "approxGranules": 1e6
+            }    
+            "experiment6" :
+            {
+                "description" :  "3 trees with sand paper"
+                "treeDiameter":  0.005
+                "mass"                  : 4.52
+                "approxGranules": 1e6
+            }    
+            "experiment7" :
+            {
+                "description" :  "side-profile with sand paper"
+                "mass"                  : 4.52
+                "approxGranules": 1e6
+            }    
+            "experiment8" :
+            {
+                "description" :  "side-profile with sand paper"
+                "mass"                  : 6.78
+                "approxGranules": 1.5e6
+            }               
+        }
+}
