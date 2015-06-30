@@ -49,11 +49,11 @@ streamlineFollowingSmoothFitIterationCount = 2
 # is the root-mean-squared difference between the measured velocity and the smooth
 # velocity interpolated to the same location, and where the median is taken over all
 # measurements in the data set
-outlierThresholdConstant = 1
+outlierThresholdConstant = 5
 
 # the minimum number of scattered data points that neighbor a given b-spline control point, 
 # below which the control point is dropped from the fit
-smoothFitMinControlPointScatteredNeighbors = 5
+smoothFitMinControlPointScatteredNeighbors = 30
 
 # the number of vectors placed along each path by the streamline following process
 pathVectorCount = 13

@@ -44,7 +44,7 @@ if(not os.path.exists(imageFileName)):
   print("not found:", imageFileName)
   exit()
   
-  
+
 # plot a velocity vector every "skip" pixels from the gridded velocity data
 skip = 6
 
@@ -56,8 +56,8 @@ height = 10
 maxPoints = 10000
 
 # the locations of the major and minor axes to plot
-x0 = 0.5
-y0 = 0.5
+x0 = 0.05
+y0 = 0
 # the width around each axis to take points from when plotting axes
 dx = 0.01
 dy = 0.01
@@ -74,7 +74,11 @@ quiverOpts = {'headwidth': 2, 'headlength':4}
 h5File = h5py.File(imageFileName, 'r')
 bounds = h5File["bounds"][...]
 imageData = h5File["data"][...]
+print("Index (0,0) (top-left):", imageData[0,0])
+print("Index (1,0):", imageData[1,0])
+    
 imageMask = numpy.array(h5File["mask"][...],bool)
+imageVelocityMask = numpy.array(h5File["velocityMask"][...],bool)
 h5File.close()
 
 
@@ -125,14 +129,15 @@ pixelVy = pixelVy/dLat*maxDeltaT
 
 [gridX, gridY] = numpy.meshgrid(gx,gy)
 
+vMagGrid = numpy.sqrt(gridVx**2 + gridVy**2)
 vMag = numpy.sqrt(vx**2+vy**2)
 
 imageMean = numpy.mean(imageData[imageMask])
 imageStd = numpy.std(imageData[imageMask])
 
 imageData *= imageMask
-imageData = numpy.maximum(imageMean-maxImageStd*imageStd,
-   numpy.minimum(imageMean+maxImageStd*imageStd,imageData))
+#imageData = numpy.maximum(imageMean-maxImageStd*imageStd,
+   #numpy.minimum(imageMean+maxImageStd*imageStd,imageData))
 
 if(x.size > maxPoints):
   indices = numpy.array(numpy.random.rand(maxPoints)*x.size,int)
@@ -168,17 +173,17 @@ yAxisGridIndex = numpy.argmin(numpy.abs(gx-x0))
 
 
 # Plot Data ============================================================
+figCount = 1
 
-
-fig = plt.figure(1, figsize=[width,height])
-#fig.subplots_adjust(left=0.075, right=0.975, bottom=0.05, top=0.95, wspace=0.2, hspace=0.25)
+fig = plt.figure(figCount, figsize=[width,height])
 ax = fig.add_subplot(111, aspect='equal')
-plt.imshow(imageData, extent=(bounds[0],bounds[1],bounds[3],bounds[2]), cmap=colormap)
-ax.set_ylim(ax.get_ylim()[::-1])
+plt.imshow(imageData, origin='lower', extent=(bounds[0],bounds[1],bounds[2],bounds[3]), cmap=colormap)
 plt.quiver(x[indices], y[indices], vx[indices], vy[indices], color='g', pivot='tail',  scale_units='xy', scale=scatterVectorScale, **quiverOpts)
 plt.quiver(x[xAxisIndices], y[xAxisIndices], vx[xAxisIndices], vy[xAxisIndices], color='r', pivot='mid',  scale_units='xy', scale=scatterVectorScale, **quiverOpts)
 plt.quiver(x[yAxisIndices], y[yAxisIndices], vx[yAxisIndices], vy[yAxisIndices], color='b', pivot='mid',  scale_units='xy', scale=scatterVectorScale, **quiverOpts)
 plt.title('a sample of %i scattered velocity vectors'%(indices.size))
+plt.xlabel("$x$ $[m]$")
+plt.ylabel("$y$ $[m]$")
 plt.axis('tight')
 
 
@@ -189,47 +194,51 @@ plt.axis('tight')
 ##ax.set_ylim(ax.get_ylim()[::-1])
 ##plt.axis('tight')
 
-
-fig = plt.figure(2, figsize=[width,height])
-#fig.subplots_adjust(left=0.075, right=0.975, bottom=0.05, top=0.95, wspace=0.2, hspace=0.25)
+figCount+=1
+fig = plt.figure(figCount, figsize=[width,height])
 ax = fig.add_subplot(111, aspect='equal')
-plt.imshow(imageData, extent=(bounds[0],bounds[1],bounds[3],bounds[2]), cmap=colormap)
-ax.set_ylim(ax.get_ylim()[::-1])
+plt.imshow(imageData, origin='lower', extent=(bounds[0],bounds[1],bounds[2],bounds[3]), cmap=colormap)
 plt.quiver(gridX[::skip,::skip], gridY[::skip,::skip], gridVx[::skip,::skip], gridVy[::skip,::skip], color='g', pivot='tail',  scale_units='xy', scale=gridVectorScale)
 plt.title('gridded velocity vector (skip = %i)'%skip)
+plt.xlabel("$x$ $[m]$")
+plt.ylabel("$y$ $[m]$")
 plt.axis('tight')
 
-fig = plt.figure(3, figsize=[width,height])
-#fig.subplots_adjust(left=0.075, right=0.975, bottom=0.05, top=0.95, wspace=0.2, hspace=0.25)
+figCount+=1
+fig = plt.figure(figCount, figsize=[width,height])
 ax = fig.add_subplot(111, aspect='equal')
-plt.imshow(gridVx, extent=(bounds[0],bounds[1],bounds[3],bounds[2]), cmap=plt.get_cmap('jet'))
-ax.set_ylim(ax.get_ylim()[::-1])
+plt.imshow(gridVx, origin='lower', extent=(bounds[0],bounds[1],bounds[2],bounds[3]), cmap=plt.get_cmap('jet'))
 plt.colorbar()
-plt.title('vx')
+plt.title('$v_x$')
+plt.xlabel("$x$ $[m]$")
+plt.ylabel("$y$ $[m]$")
 plt.axis('tight')
 
-fig = plt.figure(4, figsize=[width,height])
-#fig.subplots_adjust(left=0.075, right=0.975, bottom=0.05, top=0.95, wspace=0.2, hspace=0.25)
+figCount+=1
+fig = plt.figure(figCount, figsize=[width,height])
 ax = fig.add_subplot(111, aspect='equal')
-plt.imshow(gridVy, extent=(bounds[0],bounds[1],bounds[3],bounds[2]), cmap=plt.get_cmap('jet'))
-ax.set_ylim(ax.get_ylim()[::-1])
+plt.imshow(gridVy, origin='lower', extent=(bounds[0],bounds[1],bounds[2],bounds[3]), cmap=plt.get_cmap('jet'))
 plt.colorbar()
-plt.title('vy')
+plt.title('$v_y$')
+plt.xlabel("$x$ $[m]$")
+plt.ylabel("$y$ $[m]$")
 plt.axis('tight')
 
 
-fig = plt.figure(5, figsize=[width,height])
-#fig.subplots_adjust(left=0.075, right=0.975, bottom=0.05, top=0.95, wspace=0.2, hspace=0.25)
+figCount+=1
+fig = plt.figure(figCount, figsize=[width,height])
 ax = fig.add_subplot(111, aspect='equal')
-plt.imshow(numpy.sqrt((gridVx)**2 + gridVy**2), extent=(bounds[0],bounds[1],bounds[3],bounds[2]), cmap=plt.get_cmap('jet'))
-ax.set_ylim(ax.get_ylim()[::-1])
+plt.imshow(vMagGrid, origin='lower', extent=(bounds[0],bounds[1],bounds[2],bounds[3]), cmap=plt.get_cmap('jet') , interpolation='none')
 plt.colorbar()
-plt.title('|v|')
+plt.title(r'$||\mathbf{v}||$')
+plt.xlabel("$x$ $[m]$")
+plt.ylabel("$y$ $[m]$")
 plt.axis('tight')
 
 
 weights = numpy.ones(vx.shape)/vx.size
-fig = plt.figure(6, figsize=[width,height])
+figCount+=1
+fig = plt.figure(figCount, figsize=[width,height])
 #fig.subplots_adjust(left=0.075, right=0.975, bottom=0.05, top=0.95, wspace=0.2, hspace=0.25)
 ax = fig.add_subplot(111, aspect='equal')
 plt.hist(vMag,100,weights=weights,histtype='step')
@@ -239,10 +248,10 @@ plt.xlabel('velocity')
 plt.ylabel('tie point fraction')
 plt.title('velocity histograms')
 plt.axis('tight')
-plt.legend(['|v|','vx','vy'])
+plt.legend([r'$||\mathbf{v}||$','$v_x$','$v_y$'])
 
-fig = plt.figure(7, figsize=[width,height])
-#fig.subplots_adjust(left=0.075, right=0.975, bottom=0.05, top=0.95, wspace=0.2, hspace=0.25)
+figCount+=1
+fig = plt.figure(figCount, figsize=[width,height])
 ax = fig.add_subplot(111, aspect='equal')
 plt.hist(numpy.sqrt(pixelVx**2+pixelVy**2),100,weights=weights,histtype='step')
 plt.hist(pixelVx,100,weights=weights,histtype='step')
@@ -251,31 +260,57 @@ plt.xlabel('velocity*maxDeltaT (pixels)')
 plt.ylabel('tie point fraction')
 plt.title('pixel offset histograms (search range)')
 plt.axis('tight')
-plt.legend(['|v|','vx','vy'])
+plt.legend([r'$||\mathbf{v}||$','$v_x$','$v_y$'])
 
-fig = plt.figure(8, figsize=[width,height])
-#fig.subplots_adjust(left=0.075, right=0.975, bottom=0.05, top=0.95, wspace=0.2, hspace=0.25)
+#figCount+=1
+#fig = plt.figure(figCount, figsize=[width,height])
+#ax = fig.add_subplot(111, aspect='equal')
+#plt.plot(x[maskXAxis], vy[maskXAxis], '.k',gx,gridVy[xAxisGridIndex,:],'r')
+#plt.title('$v_y$ along $x$ axis within $dy = %.1f$ of $y = %.1f$'%(dy,y0))
+#plt.xlabel('$x$ $[m]$')
+#plt.ylabel('$v_y$ $[m/s]$')
+#plt.axis('tight')
+
+figCount+=1
+fig = plt.figure(figCount, figsize=[width,height])
 ax = fig.add_subplot(111, aspect='equal')
-plt.plot(x[maskXAxis], vy[maskXAxis], '.k',gx,gridVy[xAxisGridIndex,:],'r')
-plt.title('vy along x axis within dy = %.1f of y = %.1f'%(dy,y0))
-plt.xlabel('x')
-plt.ylabel('vy')
+plt.plot(vMag[maskYAxis], y[maskYAxis], '.k',vMagGrid[:,yAxisGridIndex],gy,'b')
+plt.title('$||\mathbf{v}||$ along $y$ axis within $dx = %.1f$ of $x = %.1f$'%(dx,x0))
+plt.xlabel('$||\mathbf{v}||$ $[m/s]$')
+plt.ylabel('$y$ $[m]$')
 plt.axis('tight')
 
-fig = plt.figure(9, figsize=[width,height])
-#fig.subplots_adjust(left=0.075, right=0.975, bottom=0.05, top=0.95, wspace=0.2, hspace=0.25)
+
+
+
+figCount+=1
+fig = plt.figure(figCount, figsize=[width,height])
 ax = fig.add_subplot(111, aspect='equal')
-plt.plot(vx[maskYAxis], y[maskYAxis], '.k',gridVx[:,yAxisGridIndex],gy,'b')
-plt.title('vx along y axis within dx = %.1f of x = %.1f'%(dx,x0))
-plt.xlabel('vx')
-plt.ylabel('y')
+plt.plot(x[maskXAxis], vMag[maskXAxis], '.k',gx,vMagGrid[xAxisGridIndex,:],'r')
+plt.title('$||\mathbf{v}||$ along $x$ axis within $dy = %.1f$ of $y = %.1f$'%(dy,y0))
+plt.ylabel('$||\mathbf{v}||$ $[m/s]$')
+plt.xlabel('$y$ $[m]$')
 plt.axis('tight')
+
+
+
+# Plot masked velocity with velocityMask
+figCount+=1
+fig = plt.figure(figCount, figsize=[width,height])
+ax = fig.add_subplot(111, aspect='equal')
+absVelMasked = vMagGrid * imageVelocityMask;
+plt.imshow(absVelMasked, origin='lower', extent=(bounds[0],bounds[1],bounds[2],bounds[3]), cmap=plt.get_cmap('jet') , interpolation='none')
+plt.colorbar()
+plt.title(r'$||\mathbf{v}||$ grid,  masked')
+plt.axis('tight')
+
+
 
 
 if residualsFound:
   maxVal = 6.0*numpy.median(correlationVelocityResiduals)
-  fig = plt.figure(10, figsize=[width,height])
-  #fig.subplots_adjust(left=0.075, right=0.975, bottom=0.05, top=0.95, wspace=0.2, hspace=0.25)
+  figCount+=1
+  fig = plt.figure(figCount, figsize=[width,height])
   ax = fig.add_subplot(111)
   weights = numpy.ones(correlationVelocityResiduals.shape)/correlationVelocityResiduals.size
   plt.hist(correlationVelocityResiduals,100,range=[0.0,maxVal], weights=weights,histtype='step')
@@ -283,8 +318,8 @@ if residualsFound:
   plt.ylabel('tie point fraction')
   
   maxVal = 6.0*numpy.median(correlationLocationResiduals)
-  fig = plt.figure(11, figsize=[width,height])
-  #fig.subplots_adjust(left=0.075, right=0.975, bottom=0.05, top=0.95, wspace=0.2, hspace=0.25)
+  figCount+=1
+  fig = plt.figure(figCount, figsize=[width,height])
   ax = fig.add_subplot(111)
   weights = numpy.ones(correlationLocationResiduals.shape)/correlationLocationResiduals.size
   plt.hist(correlationLocationResiduals,100,range=[0.0,maxVal], weights=weights,histtype='step')
@@ -292,13 +327,13 @@ if residualsFound:
   plt.ylabel('tie point fraction')
 
 
+
+
+
 plt.draw()
 if options.savePlots:
-  lastFig = 9
-  if residualsFound:
-    lastFig = 11
-  for index in range(1,lastFig+1):
-    outFileName = '%s/%s%03i.png'%(folder,options.figurePrefix, index)
+  for index in range(1,figCount+1):
+    outFileName = '%s/%s%03i.jpg'%(folder,options.figurePrefix, index)
     plt.figure(index)
     plt.savefig(outFileName)
 else:
