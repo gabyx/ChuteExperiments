@@ -121,29 +121,37 @@ class ConvertImage:
             # background subtract and make binary mask
             subtracted = np.abs(image - background)
             th = threshold_otsu(subtracted)
+            # threshol with otsu
             binary = (subtracted > th).astype(np.uint8)
 
             d = disk(5)
+            # do some opening
             binary2 = binary_opening(binary, d)
+            # do some thresholding value*otsu
             binary3 = subtracted > 0.5*th
-
+            
+            # remove small objects
             denoise = remove_small_objects(binary3,min_size=5000) # inplace = True
-            dilated = binary_dilation(denoise, rectangle(4,8))
-            blurred = gaussian_filter(dilated,sigma=1) # inplace = True
-
+            # thicken up white area abit
+            dilated = binary_dilation(denoise, disk(3))
+            # blur the image
+            blurred = gaussian_filter(dilated,sigma=3) # inplace = True
+            
             masked = denoise * image
-
+            
             # find max. length contour (interpolate)
             contours = measure.find_contours(blurred, 0.5)
             if contours :
-                 contourMax = max(contours,key=lambda x: x.shape[0])
-                 tck,u = scp.interpolate.splprep([contourMax[:, 0], contourMax[:, 1]], s=1e4)
-                 unew = np.linspace(0, 1.0, 3000)
-                 contourInterp = scp.interpolate.splev(unew, tck)
+                contourMax = max(contours,key=lambda x: x.shape[0])
+                tck,u = scp.interpolate.splprep([contourMax[:, 0], contourMax[:, 1]], s=1e4)
+                unew = np.linspace(0, 1.0, 3000)
+                contourInterp = scp.interpolate.splev(unew, tck)
             else:
-                 contourMax = None
-                 contourInterp = None
-
+                contourMax = None
+                contourInterp = None
+                
+            
+            final_mask = dilated.astype(np.uint8)
             
             # ====================================================================================================
             
@@ -170,7 +178,7 @@ class ConvertImage:
             ax = plt.Axes(f, [0., 0., 1., 1.])
             #ax.set_axis_off()
             f.add_axes(ax)
-            ax.imshow(dilated,cmap=cm.Greys_r)
+            ax.imshow(final_mask,cmap=cm.Greys_r)
             ax.set_autoscalex_on(False)
             ax.set_autoscaley_on(False)
             f.savefig(out % "mask")
