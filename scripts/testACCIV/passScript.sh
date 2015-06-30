@@ -7,6 +7,7 @@ passes=(test/pass1 test/pass2 test/pass3)
 for pass in  "${passes[@]}"; do
     echo "Do pass $pass"
     $acciv $pass
+    
     python testScripts/plotVelocities.py --folder=$pass --imageFileName=image000.h5 --savePlots
 done
 

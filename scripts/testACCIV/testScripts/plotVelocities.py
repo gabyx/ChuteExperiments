@@ -1,9 +1,12 @@
 #!/usr/bin/python
 import numpy
 import h5py
+
 from optparse import OptionParser
-import matplotlib
 import os.path
+  
+import matplotlib as mpl
+
 
 parser = OptionParser()
 parser.add_option("--folder", type="string", default='full/pass1/', dest="folder", help="folder of the output data to be plotted")
@@ -18,28 +21,32 @@ parser.add_option("--tiePointsFolder", type="string", default='_work', dest="tie
 options, args = parser.parse_args()
 
 
-if options.savePlots:
-  matplotlib.use('Agg')
 
+if options.savePlots:
+  mpl.use('Agg')
+  
+import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 
 folder = options.folder
 scatterFileName = '%s/%s'%(folder,options.scatterFileName)
 if(not os.path.exists(scatterFileName)):
-  #print "not found:", scatterFileName
+  #print("not found:", scatterFileName)
   exit()
 gridFileName = '%s/%s'%(folder,options.gridFileName)
 if(not os.path.exists(gridFileName)):
-  print "not found:", gridFileName
+  print("not found:", gridFileName)
   exit()
 tiePointsFileName = '%s/%s/combinedCorrelationTiePoints.h5'%(folder,options.tiePointsFolder)
 imageFileName = options.imageFileName
 if(not os.path.exists(imageFileName)):
-  print "not found:", imageFileName
+  print("not found:", imageFileName)
   exit()
+  
+  
 # plot a velocity vector every "skip" pixels from the gridded velocity data
-skip = 8
+skip = 6
 
 # width and height of each figure (inches)
 width = 12
@@ -59,8 +66,10 @@ maxImageStd = 3.0 # Image data is clamped to be within 3 std. dev. from the mean
                   # Decrease this number to increase image contrast.
 
 # decrease these numbers to increase the length of vectors, and visa versa
-scatterVectorScale = 30.0
-gridVectorScale = 30.0
+scatterVectorScale = 200.0
+gridVectorScale = 200.0
+
+quiverOpts = {'headwidth': 2, 'headlength':4}
 
 h5File = h5py.File(imageFileName, 'r')
 bounds = h5File["bounds"][...]
@@ -98,9 +107,16 @@ gridVy = h5File["vy"][...]
 h5File.close()
 gx = numpy.linspace(bounds[0],bounds[1],gridVx.shape[1])
 gy = numpy.linspace(bounds[2],bounds[3],gridVx.shape[0])
-#print numpy.amax(numpy.abs(gridVx))
-#print numpy.amax(numpy.abs(gridVy))
 
+
+
+# File info: ===========================================================
+print( "Grid Data size: " + str(gridVx.shape) )
+print( "Scattered data size: " + str(vx.shape) )
+print( "Scattered pixelVx size: " + str(pixelVx.shape) )
+# ======================================================================
+
+# Setup Data============================================================
 dLon = gx[1]-gx[0]
 dLat = gy[1]-gy[0]
 
@@ -137,7 +153,9 @@ alpha = 0.25
 colorList = alpha*colorList1 + (1-alpha)*colorList2
 colorList = tuple(tuple(x) for x in colorList)
 
-colormap = colors.LinearSegmentedColormap.from_list('my_map',colorList,N=256)
+
+colormap = cm.Greys_r
+#colormap = colors.LinearSegmentedColormap.from_list('my_map',colorList,N=256)
 
 
 maskXAxis = numpy.abs(y-y0) < dy
@@ -148,24 +166,28 @@ yAxisIndices = indices[maskYAxis[indices]]
 xAxisGridIndex = numpy.argmin(numpy.abs(gy-y0))
 yAxisGridIndex = numpy.argmin(numpy.abs(gx-x0))
 
+
+# Plot Data ============================================================
+
+
 fig = plt.figure(1, figsize=[width,height])
 #fig.subplots_adjust(left=0.075, right=0.975, bottom=0.05, top=0.95, wspace=0.2, hspace=0.25)
 ax = fig.add_subplot(111, aspect='equal')
 plt.imshow(imageData, extent=(bounds[0],bounds[1],bounds[3],bounds[2]), cmap=colormap)
 ax.set_ylim(ax.get_ylim()[::-1])
-plt.quiver(x[indices], y[indices], vx[indices], vy[indices], color='k', pivot='mid',  scale_units='xy', scale=scatterVectorScale)
-plt.quiver(x[xAxisIndices], y[xAxisIndices], vx[xAxisIndices], vy[xAxisIndices], color='r', pivot='mid',  scale_units='xy', scale=scatterVectorScale)
-plt.quiver(x[yAxisIndices], y[yAxisIndices], vx[yAxisIndices], vy[yAxisIndices], color='b', pivot='mid',  scale_units='xy', scale=scatterVectorScale)
+plt.quiver(x[indices], y[indices], vx[indices], vy[indices], color='g', pivot='tail',  scale_units='xy', scale=scatterVectorScale, **quiverOpts)
+plt.quiver(x[xAxisIndices], y[xAxisIndices], vx[xAxisIndices], vy[xAxisIndices], color='r', pivot='mid',  scale_units='xy', scale=scatterVectorScale, **quiverOpts)
+plt.quiver(x[yAxisIndices], y[yAxisIndices], vx[yAxisIndices], vy[yAxisIndices], color='b', pivot='mid',  scale_units='xy', scale=scatterVectorScale, **quiverOpts)
 plt.title('a sample of %i scattered velocity vectors'%(indices.size))
 plt.axis('tight')
 
 
-#fig = plt.figure(12, figsize=[width,height])
-##fig.subplots_adjust(left=0.075, right=0.975, bottom=0.05, top=0.95, wspace=0.2, hspace=0.25)
-#ax = fig.add_subplot(111, aspect='equal')
-#plt.imshow(imageData, extent=(bounds[0],bounds[1],bounds[3],bounds[2]), cmap=colormap)
-#ax.set_ylim(ax.get_ylim()[::-1])
-#plt.axis('tight')
+##fig = plt.figure(12, figsize=[width,height])
+###fig.subplots_adjust(left=0.075, right=0.975, bottom=0.05, top=0.95, wspace=0.2, hspace=0.25)
+##ax = fig.add_subplot(111, aspect='equal')
+##plt.imshow(imageData, extent=(bounds[0],bounds[1],bounds[3],bounds[2]), cmap=colormap)
+##ax.set_ylim(ax.get_ylim()[::-1])
+##plt.axis('tight')
 
 
 fig = plt.figure(2, figsize=[width,height])
@@ -173,7 +195,7 @@ fig = plt.figure(2, figsize=[width,height])
 ax = fig.add_subplot(111, aspect='equal')
 plt.imshow(imageData, extent=(bounds[0],bounds[1],bounds[3],bounds[2]), cmap=colormap)
 ax.set_ylim(ax.get_ylim()[::-1])
-plt.quiver(gridX[::skip,::skip], gridY[::skip,::skip], gridVx[::skip,::skip], gridVy[::skip,::skip], color='k', pivot='mid',  scale_units='xy', scale=gridVectorScale)
+plt.quiver(gridX[::skip,::skip], gridY[::skip,::skip], gridVx[::skip,::skip], gridVy[::skip,::skip], color='g', pivot='tail',  scale_units='xy', scale=gridVectorScale)
 plt.title('gridded velocity vector (skip = %i)'%skip)
 plt.axis('tight')
 
@@ -205,8 +227,8 @@ plt.colorbar()
 plt.title('|v|')
 plt.axis('tight')
 
-weights = numpy.ones(vx.shape)/vx.size
 
+weights = numpy.ones(vx.shape)/vx.size
 fig = plt.figure(6, figsize=[width,height])
 #fig.subplots_adjust(left=0.075, right=0.975, bottom=0.05, top=0.95, wspace=0.2, hspace=0.25)
 ax = fig.add_subplot(111, aspect='equal')

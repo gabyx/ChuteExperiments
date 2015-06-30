@@ -1,9 +1,0 @@
-# Code für Video ohne plot
-# Pfade müssen noch angepasst werden
-# in terminal starten
-/Users/silviobamert/desktop/ffmpeg/ffmpeg -r 30 -i /Users/silviobamert/desktop/experiment1/experiment1_%04d.jpg -vcodec libx264 -tune grain -r 30 video_experiment1.mp4
-
-# Code Video mit plot
-# Pfade müssen noch angepasst werden
-# in terminal starten
-$ /Users/silviobamert/desktop/ffmpeg/ffmpeg -r 30 -i /volumes/PULVERZUCKER/Plots/plot%01d.png -vcodec libx264 -tune grain -r 30 video_experiment1.mp4

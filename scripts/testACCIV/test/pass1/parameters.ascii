@@ -23,15 +23,15 @@ inEarlierVelocityFileName = inGridVelocity.h5
 inLaterVelocityFileName = inGridVelocity.h5
 
 # the size of the box of pixels used to perform correlations: [xSize, ysize]
-correlationBoxSize = [64, 64]
+correlationBoxSize = [48, 48]
 
 # the range of pixels over which to search for correlations: [xMin, xMax, yMin, yMax]
 # This search range will be scaled by the time separation between image
 # pairs (normalized by the max time between image pairs).  This insures that ACCIV
 # searches the same approximate range of velocities for each image pair
-searchRange = [-5, 5, -5, 5]
+searchRange = [-3, 3, -2, 2]
 
 # the stride between correlations (after finding each correlation, how many pixels
 # do we shift the correlation box by to find the next correlation): [xStride, yStride]
-stride = [16,16]
+stride = [4,4]
 

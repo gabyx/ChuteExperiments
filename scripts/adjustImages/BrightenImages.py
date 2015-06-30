@@ -13,7 +13,6 @@ from wand.image import Image
 from optparse import OptionParser
 parser = OptionParser()
 parser.add_option("-i", "--inputFolder", dest="inputFolder", help="Input folder", metavar="FILE")
-parser.add_option("-o", "--outputFolder", dest="outputFolder", help="Output folder  (.tiff or something similar)", metavar="OUTPUT")
 parser.add_option("-f", "--inputRegex", dest="inputRegex", help="Regex to filter filesnames for input", metavar="JPG/TIF")
 parser.add_option("-r", "--outputReplacement", dest="outputReplacement", help="Replacement string to generate new file name, can contain backreferences!", metavar="JPG/TIF")                   
 parser.add_option("-c", "--command", dest="command", help="ImageMagick command options!", metavar="JPG/TIF")                   
