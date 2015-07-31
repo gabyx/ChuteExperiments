@@ -1,2 +1,5 @@
 _work
 masks
+runs
+out*
+.log

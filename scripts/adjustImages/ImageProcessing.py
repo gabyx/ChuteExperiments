@@ -29,7 +29,9 @@ from skimage import img_as_float
 from skimage.morphology import disk
 from skimage import measure
 
-from MultiProcessingLog import MultiProcessingLog
+from importlib.machinery import SourceFileLoader
+l = SourceFileLoader("MultiProcessingLog","../common/MultiProcessingLog.py")
+mpl = l.load_module()
 
 
 from argparse import ArgumentParser

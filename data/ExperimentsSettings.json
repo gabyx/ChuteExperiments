@@ -44,7 +44,7 @@
                 "mass"                  : 4.52
                 "approxGranules": 1e6
                 "offsetZero"    : [783,286]
-                "offsetDescription"    : "first tree"
+                "offsetDescription"    : "first tree, from top-left"
             }    
             "experiment6" :
             {
