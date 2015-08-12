@@ -40,6 +40,7 @@ gridFileName = '%s/%s'%(folder,options.gridFileName)
 if(not os.path.exists(gridFileName)):
   print("not found:", gridFileName)
   exit()
+  
 tiePointsFileName = '%s/%s/combinedCorrelationTiePoints.h5'%(folder,options.tiePointsFolder)
 imageFileName = options.imageFileName
 if(not os.path.exists(imageFileName)):
