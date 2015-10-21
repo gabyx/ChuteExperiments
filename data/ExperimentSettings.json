@@ -1,68 +1,77 @@
 {
     "framerate"             : 1000,
+    "resolution"            : [800,600],
     "deltaT"                : 0.001,
     "plexiglassThickness"   : 0.012,
     "outletOpeningWidth"    : 0.02,
-    "upperSlopeLength"      : 0.0296,
+    "upperSlopeLength"      : 0.296,
     "upperSlopeAngleDeg"    : 30,
     "downSlopeAngleDeg"     : 20,
     "sandPaperRoughness"    : "P24",
     "stepOntoFlowSurface"   : 0.002,
     "pxPerMeter"            : 967.5931,
-
-    "experimentSettings"    :
+    "experiments"    :
         {
-            "experiment1" :
+            "1" :
             {
                 "description" :  "with sand paper",
                 "mass"                  : 4.52,
                 "approxGranules": 1e6
             },         
-            "experiment2" :
+            "2" :
             {
                 "description" :  "with sand paper",
                 "mass"                  : 4.52,
                 "approxGranules": 1e6
             },   
-            "experiment3" :
+            "3" :
             {
                 "description" :  "with sand paper",
                 "mass"                  : 4.52,
                 "approxGranules": 1e6
             },    
-            "experiment4" :
+            "4" :
             {
                 "description" :  "without sand paper",
                 "mass"                  : 4.52,
-                "offsetZero"    : [783,286],
-                "startIdx"      : 170,
-                "offsetDescription"    : "first tree, from top-left",
-                "approxGranules": 1e6
+                "offsetZero"    : [783,289],
+                "aabbPixelCoordinates" : {"minPoint" : [-783,-311], "maxPoint" : [17,289] },
+                "aabbMeterCoordinates" : {"minPoint" : [-0.80922446 ,-0.3214161 ], "maxPoint" : [ 0.01756937 , 0.29867927] },
+                "startIdx"      : 175,
+                "offsetDescription"     : "same as  5, in pixel",
+                "approxGranules": 1e6,
+                "deltaTimeEntryTillFinal" : 1.22
             },    
-            "experiment5" : 
+            "5" : 
             {
                 "description" :  "3 trees without sand paper",
                 "treeDiameter":  0.005,
                 "mass"        : 4.52,
                 "approxGranules": 1e6,
-                "offsetZero"    : [783,286],
-                "startIdx"      : 330,
-                "offsetDescription"    : "first tree, from top-left"
+                "offsetZero"    : [783,289],
+                "aabbPixelCoordinates" : {"minPoint" : [-783,-311], "maxPoint" : [17,289] },
+                "aabbMeterCoordinates" : {"minPoint" : [-0.80922446 ,-0.3214161 ], "maxPoint" : [ 0.01756937 , 0.29867927] },
+                "offsetDescription"     : "offsetZero is the index (null-indexed) of the pixel from top-left which marks the zero point",
+                "startIdx"      : 340,
+                "treeLocations"  : [[-0.1254,0.004],[-0.1794,0.0277],[-0.1829,-0.02704]],
+                "treeLocationDescription" : "first is middle tree, in meters from zero point",
+                "deltaTimeStartTillEntry" : 0.233,
+                "deltaTimeEntryTillFinal" : 1.24
             },    
-            "experiment6" :
+            "6" :
             {
                 "description" :  "3 trees with sand paper",
                 "treeDiameter":  0.005,
                 "mass"                  : 4.52,
                 "approxGranules": 1e6
             },    
-            "experiment7" :
+            "7" :
             {
                 "description" :  "side-profile with sand paper",
                 "mass"                  : 4.52,
                 "approxGranules": 1e6
             },    
-            "experiment8" :
+            "8" :
             {
                 "description" :  "side-profile with sand paper",
                 "mass"                  : 6.78,

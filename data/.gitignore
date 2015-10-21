@@ -1,7 +1,6 @@
 *.bmp
 *.tiff
 distance
-experiment*
 *.ipynb_checkpoints
 *.pyc
 *.pdf
