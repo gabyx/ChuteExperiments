@@ -7,6 +7,7 @@
     "upperSlopeLength"      : 0.296,
     "upperSlopeAngleDeg"    : 30,
     "downSlopeAngleDeg"     : 20,
+    "downSlopeAngleDifference": 10,
     "sandPaperRoughness"    : "P24",
     "stepOntoFlowSurface"   : 0.002,
     "pxPerMeter"            : 967.5931,
@@ -53,7 +54,8 @@
                 "aabbMeterCoordinates" : {"minPoint" : [-0.80922446 ,-0.3214161 ], "maxPoint" : [ 0.01756937 , 0.29867927] },
                 "offsetDescription"     : "offsetZero is the index (null-indexed) of the pixel from top-left which marks the zero point",
                 "startIdx"      : 340,
-                "treeLocations"  : [[-0.1254,0.004],[-0.1794,0.0277],[-0.1829,-0.02704]],
+                "treeLocationsFromLowerLeft"  : [[660,314.5],[608,336],[606,287.5]],
+                "treeLocationsMeter"  : [[-0.1254,0.004],[-0.1794,0.0277],[-0.1829,-0.02704]],
                 "treeLocationDescription" : "first is middle tree, in meters from zero point",
                 "deltaTimeStartTillEntry" : 0.233,
                 "deltaTimeEntryTillFinal" : 1.24
